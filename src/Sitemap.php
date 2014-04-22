@@ -30,11 +30,14 @@ class Sitemap extends AbstractSitemap
      * @param  float  $priority
      * @return $this
      */
-    public function add($url, $lastModified, $changeFrequency = null, $priority = null)
+    public function add($url, $lastModified = null, $changeFrequency = null, $priority = null)
     {
         $node = $this->document->createElement('url');
         $node->appendChild(new DOMElement('loc', $this->escapeString($url)));
-        $node->appendChild(new DOMElement('lastmod', $lastModified));
+
+        if (! is_null($lastModified)) {
+            $node->appendChild(new DOMElement('lastmod', $lastModified));
+        }
 
         if (! is_null($changeFrequency)) {
             $node->appendChild(new DOMElement('changefreq', $changeFrequency));
