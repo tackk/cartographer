@@ -1,4 +1,6 @@
 <?php
+use Tackk\Cartographer\Sitemap;
+use Tackk\Cartographer\ChangeFrequency;
 
 class SitemapTest extends PHPUnit_Framework_TestCase
 {
@@ -20,8 +22,8 @@ class SitemapTest extends PHPUnit_Framework_TestCase
 </urlset>
 
 XML;
-        $sitemap = new Tackk\Cartographer\Sitemap();
-        $sitemap->add('http://foo.com', '2005-01-02', 'weekly', 1.0);
+        $sitemap = new Sitemap();
+        $sitemap->add('http://foo.com', '2005-01-02', ChangeFrequency::WEEKLY, 1.0);
         $sitemap->add('http://foo.com/about', '2005-01-01');
         $this->assertEquals($expected, $sitemap->toString());
     }

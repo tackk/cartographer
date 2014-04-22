@@ -18,8 +18,11 @@ If you have a sitemap that is under 50,000 items, you can just use the Sitemap c
 Generator.
 
 ``` php
+use Tackk\Cartographer\Sitemap;
+use Tackk\Cartographer\ChangeFrequency;
+
 $sitemap = new Tackk\Cartographer\Sitemap();
-$sitemap->add('http://foo.com', '2005-01-02', 'weekly', 1.0);
+$sitemap->add('http://foo.com', '2005-01-02', ChangeFrequency::WEEKLY, 1.0);
 $sitemap->add('http://foo.com/about', '2005-01-01');
 
 // Write it to a file
