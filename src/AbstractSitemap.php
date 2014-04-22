@@ -39,6 +39,11 @@ abstract class AbstractSitemap
     protected $rootNode;
 
     /**
+     * @var bool
+     */
+    protected $isFrozen = false;
+
+    /**
      * Sets up the sitemap XML document and urlset node.
      */
     public function __construct()
@@ -46,6 +51,20 @@ abstract class AbstractSitemap
         $this->document = new DOMDocument($this->xmlVersion, $this->xmlEncoding);
         $this->document->formatOutput = true;
         $this->rootNode = $this->document->createElementNS($this->xmlNamespaceUri, $this->getRootNodeName());
+    }
+
+    /**
+     * Freeze the sitemap, and append the rootNode to the document.
+     */
+    public function freeze()
+    {
+        $this->document->appendChild($this->rootNode);
+        $this->isFrozen = true;
+    }
+
+    public function isFrozen()
+    {
+        return $this->isFrozen;
     }
 
     /**
@@ -63,7 +82,10 @@ abstract class AbstractSitemap
      */
     public function __toString()
     {
-        $this->document->appendChild($this->rootNode);
+        if (! $this->isFrozen()) {
+            $this->freeze();
+        }
+
         return $this->document->saveXML();
     }
 
