@@ -1,6 +1,6 @@
 <?php
 
-namespace Cartographer;
+namespace Tackk\Cartographer;
 
 use League\Flysystem\FilesystemInterface;
 
@@ -27,4 +27,6 @@ class Sitemap
     {
         return $this->filesystem;
     }
+
+
 } 
