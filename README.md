@@ -20,7 +20,7 @@ Generator.
 ``` php
 $sitemap = new Tackk\Cartographer\Sitemap();
 $sitemap->add('http://foo.com', '2005-01-02', 'weekly', 1.0);
-$sitemap->add('http://foo.com/about', '2005-01-01', 'weekly', 0.8);
+$sitemap->add('http://foo.com/about', '2005-01-01');
 
 // Write it to a file
 file_put_contents('sitemap.xml', (string) $sitemap);
@@ -44,8 +44,6 @@ echo $sitemap->toString();
   <url>
     <loc>http://foo.com/about</loc>
     <lastmod>2005-01-01</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
   </url>
 </urlset>
 ```
