@@ -15,7 +15,7 @@ use League\Flysystem\Adapter\Local as LocalAdapter;
 
 $adapter = new LocalAdapter(__DIR__);
 $filesystem = new Filesystem($adapter);
-$sitemap = new Tackk\Cartographer\Sitemap($filesystem);
+$generator = new Tackk\Cartographer\Generator($filesystem);
 ```
 
 ## Running Tests

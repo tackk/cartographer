@@ -4,7 +4,7 @@ namespace Tackk\Cartographer;
 
 use League\Flysystem\FilesystemInterface;
 
-class Sitemap
+class Generator
 {
     /**
      * @var FilesystemInterface
@@ -28,5 +28,9 @@ class Sitemap
         return $this->filesystem;
     }
 
+    public function generate()
+    {
+        // pass
+    }
 
 } 
