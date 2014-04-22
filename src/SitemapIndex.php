@@ -4,28 +4,24 @@ namespace Tackk\Cartographer;
 
 use DOMElement;
 
-class Sitemap extends AbstractSitemap
+class SitemapIndex extends AbstractSitemap
 {
     protected function getRootNodeName()
     {
-        return 'urlset';
+        return 'sitemapindex';
     }
 
     /**
-     * Adds a URL to the urlset.
+     * Adds a Sitemap URL to the sitemapindex.
      * @param  string $url
      * @param  string $lastModified
-     * @param  string $changeFrequency
-     * @param  float  $priority
      * @return $this
      */
-    public function add($url, $lastModified, $changeFrequency, $priority)
+    public function add($url, $lastModified)
     {
         $node = $this->document->createElement('url');
         $node->appendChild(new DOMElement('loc', $this->escapeString($url)));
         $node->appendChild(new DOMElement('lastmod', $lastModified));
-        $node->appendChild(new DOMElement('changefreq', $changeFrequency));
-        $node->appendChild(new DOMElement('priority', $priority));
         $this->rootNode->appendChild($node);
 
         return $this;
