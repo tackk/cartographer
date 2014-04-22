@@ -13,3 +13,13 @@ production.**
 
 $sitemap = new Cartogropher\Sitemap();
 ```
+
+## Running Tests
+
+*This assumes you have ran `composer update`.*
+
+From the repository root, run:
+
+```
+vendor/bin/phpunit
+```
