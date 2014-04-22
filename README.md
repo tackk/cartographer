@@ -10,8 +10,9 @@ production.**
 
 ``` php
 <?php
-
-$sitemap = new Cartogropher\Sitemap();
+$adapter = new LocalAdapter(__DIR__);
+$filesystem = new Filesystem($adapter);
+$sitemap = new Tackk\Cartographer\Sitemap($filesystem);
 ```
 
 ## Running Tests
