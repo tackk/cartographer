@@ -12,7 +12,7 @@
         "phpunit/phpunit": "3.7.*"
     },
     "require": {
-
+        "league/flysystem": "0.4.*"
     },
     "autoload": {
         "psr-4": {
