@@ -1,0 +1,22 @@
+{
+    "name": "tackk/cartographer",
+    "description": "A PHP sitemap generation tool.",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Dan Horrigan",
+            "email": "dh@tackk.com"
+        }
+    ],
+    "require-dev": {
+        "phpunit/phpunit": "3.7.*"
+    },
+    "require": {
+
+    },
+    "autoload": {
+        "psr-4": {
+            "Cartographer\\": "src/"
+        }
+    }
+}
