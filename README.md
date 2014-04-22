@@ -10,6 +10,9 @@ production.**
 
 ``` php
 <?php
+use League\Flysystem\Filesystem;
+use League\Flysystem\Adapter\Local as LocalAdapter;
+
 $adapter = new LocalAdapter(__DIR__);
 $filesystem = new Filesystem($adapter);
 $sitemap = new Tackk\Cartographer\Sitemap($filesystem);
