@@ -30,6 +30,26 @@ header ('Content-Type:text/xml');
 echo $sitemap->toString();
 ```
 
+#### Output
+
+``` xml
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>http://foo.com</loc>
+    <lastmod>2005-01-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1</priority>
+  </url>
+  <url>
+    <loc>http://foo.com/about</loc>
+    <lastmod>2005-01-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+</urlset>
+```
+
 ### Basic Sitemap Index
 
 If you want to build a Sitemap Index, seperate from the Sitemap Generator, you can!
@@ -45,6 +65,22 @@ file_put_contents('sitemap.xml', (string) $sitemapIndex);
 // or simply echo it:
 header ('Content-Type:text/xml');
 echo $sitemapIndex->toString();
+```
+
+#### Output
+
+``` xml
+<?xml version="1.0" encoding="UTF-8"?>
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>http://foo.com/sitemaps/sitemap.1.xml</loc>
+    <lastmod>2012-01-02</lastmod>
+  </url>
+  <url>
+    <loc>http://foo.com/sitemaps/sitemap.2.xml</loc>
+    <lastmod>2012-01-02</lastmod>
+  </url>
+</sitemapindex>
 ```
 
 ### Sitemap Generator
