@@ -15,6 +15,9 @@
         "league/flysystem": "0.4.*"
     },
     "autoload": {
+        "files": [
+            "src/functions.php"
+        ],
         "psr-4": {
             "Tackk\\Cartographer\\": "src/"
         }

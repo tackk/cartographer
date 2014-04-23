@@ -25,4 +25,46 @@ class GeneratorTest extends PHPUnit_Framework_TestCase
     {
         $this->assertInstanceOf('League\Flysystem\FilesystemInterface', $this->generator->getFilesystem());
     }
+
+    public function testSetIteratorThroughSetter()
+    {
+        $this->generator->setIterator(new ArrayIterator());
+        $this->assertAttributeInstanceOf('Iterator', 'iterator', $this->generator);
+
+        $this->setExpectedException('PHPUnit_Framework_Error');
+        $this->generator->setIterator('foo');
+    }
+
+    public function testGenerateRequiresIterator()
+    {
+        $this->setExpectedException('RuntimeException');
+        $this->generator->generate();
+    }
+
+    public function testCanGenerateSmallSitemap()
+    {
+        $expected = <<<XML
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>http://foo.com/1</loc>
+  </url>
+  <url>
+    <loc>http://foo.com/2</loc>
+  </url>
+  <url>
+    <loc>http://foo.com/3</loc>
+  </url>
+</urlset>
+
+XML;
+        $this->generator->setIterator(new ArrayIterator([
+            ['url' => 'http://foo.com/1'],
+            ['url' => 'http://foo.com/2'],
+            ['url' => 'http://foo.com/3'],
+        ]));
+
+        $actual = $this->generator->generate();
+        $this->assertEquals($expected, $actual);
+    }
 }
