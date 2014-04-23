@@ -1,6 +1,8 @@
 <?php
 
-class MockAbstractSitemap extends Tackk\Cartographer\AbstractSitemap
+use Tackk\Cartographer\AbstractSitemap;
+
+class MockAbstractSitemap extends AbstractSitemap
 {
     protected function getRootNodeName()
     {
@@ -41,6 +43,15 @@ class AbstractSitemapTest extends PHPUnit_Framework_TestCase
     public function testEscapeString()
     {
         $this->assertEquals('&amp;&apos;&quot;&gt;&lt;', $this->callProtectedMethod('escapeString', ['&\'"><']));
+    }
+
+    public function testMaxUrlCount()
+    {
+        $this->setExpectedException('Tackk\Cartographer\MaxUrlCountExceededException');
+
+        for ($i = 0; $i < AbstractSitemap::MAX_URLS + 1; $i++) {
+            $this->callProtectedMethod('addUrlToDocument', [['loc' => 'http://foo.com']]);
+        }
     }
 
     protected function callProtectedMethod($name, array $args) {

@@ -2,8 +2,6 @@
 
 namespace Tackk\Cartographer;
 
-use DOMElement;
-
 class ChangeFrequency
 {
     const ALWAYS = 'always';
@@ -23,32 +21,17 @@ class Sitemap extends AbstractSitemap
     }
 
     /**
-     * Adds a URL to the urlset.
-     * @param  string $url
-     * @param  string $lastModified
-     * @param  string $changeFrequency
-     * @param  float  $priority
+     * Adds the URL to the urlset.
+     * @param  string     $loc
+     * @param  string|int $lastmod
+     * @param  string     $changefreq
+     * @param  float      $priority
      * @return $this
      */
-    public function add($url, $lastModified = null, $changeFrequency = null, $priority = null)
+    public function add($loc, $lastmod = null, $changefreq = null, $priority = null)
     {
-        $node = $this->document->createElement('url');
-        $node->appendChild(new DOMElement('loc', $this->escapeString($url)));
-
-        if (! is_null($lastModified)) {
-            $node->appendChild(new DOMElement('lastmod', $this->formatDate($lastModified)));
-        }
-
-        if (! is_null($changeFrequency)) {
-            $node->appendChild(new DOMElement('changefreq', $changeFrequency));
-        }
-
-        if (! is_null($priority)) {
-            $node->appendChild(new DOMElement('priority', $priority));
-        }
-
-        $this->rootNode->appendChild($node);
-
-        return $this;
+        $loc = $this->escapeString($loc);
+        $lastmod = $this->formatDate($lastmod);
+        return $this->addUrlToDocument(compact('loc', 'lastmod', 'changefreq', 'priority'));
     }
 }

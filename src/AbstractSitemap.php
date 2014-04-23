@@ -7,9 +7,15 @@ use DateTimeZone;
 use DOMDocument;
 use DOMElement;
 use InvalidArgumentException;
+use RuntimeException;
+
+class MaxUrlCountExceededException extends RuntimeException {}
+
 
 abstract class AbstractSitemap
 {
+    const MAX_URLS = 50000;
+
     /**
      * Get the root node name for the sitemap (e.g. 'urlset').
      * @return string
@@ -47,6 +53,11 @@ abstract class AbstractSitemap
     protected $isFrozen = false;
 
     /**
+     * @var int
+     */
+    protected $urlCount = 0;
+
+    /**
      * Sets up the sitemap XML document and urlset node.
      */
     public function __construct()
@@ -68,6 +79,15 @@ abstract class AbstractSitemap
     public function isFrozen()
     {
         return $this->isFrozen;
+    }
+
+    /**
+     * Gets the number of Urls in the sitemap.
+     * @return int
+     */
+    public function getUrlCount()
+    {
+        return $this->urlCount;
     }
 
     /**
@@ -93,6 +113,32 @@ abstract class AbstractSitemap
     }
 
     /**
+     * Adds a URL to the document with the given array of elements.
+     * @param  array $urlArray
+     * @return $this
+     * @throws MaxUrlCountExceededException
+     */
+    protected function addUrlToDocument(array $urlArray)
+    {
+        if ($this->getUrlCount() >= AbstractSitemap::MAX_URLS) {
+            throw new MaxUrlCountExceededException('Maximum number of URLs has been reached, cannot add more.');
+        }
+
+        $node = $this->document->createElement('url');
+
+        foreach ($urlArray as $key => $value) {
+            if (is_null($value)) {
+                continue;
+            }
+            $node->appendChild(new DOMElement($key, $value));
+        }
+        $this->rootNode->appendChild($node);
+        $this->urlCount++;
+
+        return $this;
+    }
+
+    /**
      * Escapes a string so it can be inserted into the Sitemap
      * @param  string $string The string to escape.
      * @return string
@@ -112,6 +158,10 @@ abstract class AbstractSitemap
      */
     protected function formatDate($dateString)
     {
+        if (is_null($dateString)) {
+            return null;
+        }
+
         try {
             // We have to handle timestamps a little differently
             if (is_numeric($dateString) && (int) $dateString == $dateString) {
