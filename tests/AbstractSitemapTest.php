@@ -47,11 +47,14 @@ class AbstractSitemapTest extends PHPUnit_Framework_TestCase
 
     public function testMaxUrlCount()
     {
-        $this->setExpectedException('Tackk\Cartographer\MaxUrlCountExceededException');
+        // Pretend we already have 50,000 URLs
+        $class = new ReflectionClass($this->abstractMock);
+        $urlCount = $class->getProperty('urlCount');
+        $urlCount->setAccessible(true);
+        $urlCount->setValue($this->abstractMock, AbstractSitemap::MAX_URLS);
 
-        for ($i = 0; $i < AbstractSitemap::MAX_URLS + 1; $i++) {
-            $this->callProtectedMethod('addUrlToDocument', [['loc' => 'http://foo.com']]);
-        }
+        $this->setExpectedException('Tackk\Cartographer\MaxUrlCountExceededException');
+        $this->callProtectedMethod('addUrlToDocument', [['loc' => 'http://foo.com']]);
     }
 
     protected function callProtectedMethod($name, array $args) {
