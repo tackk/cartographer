@@ -9,11 +9,11 @@ class SitemapIndexTest extends PHPUnit_Framework_TestCase
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>http://foo.com/sitemaps/sitemap.1.xml</loc>
-    <lastmod>2012-01-02</lastmod>
+    <lastmod>2012-01-02T00:00:00+00:00</lastmod>
   </url>
   <url>
     <loc>http://foo.com/sitemaps/sitemap.2.xml</loc>
-    <lastmod>2012-01-02</lastmod>
+    <lastmod>2012-01-02T00:00:00+00:00</lastmod>
   </url>
 </sitemapindex>
 

@@ -21,7 +21,7 @@ class SitemapIndex extends AbstractSitemap
     {
         $node = $this->document->createElement('url');
         $node->appendChild(new DOMElement('loc', $this->escapeString($url)));
-        $node->appendChild(new DOMElement('lastmod', $lastModified));
+        $node->appendChild(new DOMElement('lastmod', $this->formatDate($lastModified)));
         $this->rootNode->appendChild($node);
 
         return $this;

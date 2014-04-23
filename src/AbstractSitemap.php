@@ -2,8 +2,11 @@
 
 namespace Tackk\Cartographer;
 
+use DateTime;
+use DateTimeZone;
 use DOMDocument;
 use DOMElement;
+use InvalidArgumentException;
 
 abstract class AbstractSitemap
 {
@@ -99,5 +102,26 @@ abstract class AbstractSitemap
         $from = ['&', '\'', '"', '>', '<'];
         $to = ['&amp;', '&apos;', '&quot;', '&gt;', '&lt;'];
         return str_replace($from, $to, $string);
+    }
+
+    /**
+     * Takes a date as a string (or int in the case of a unix timestamp).
+     * @param  string $dateString
+     * @return string
+     * @throws InvalidArgumentException
+     */
+    protected function formatDate($dateString)
+    {
+        try {
+            // We have to handle timestamps a little differently
+            if (is_numeric($dateString) && (int) $dateString == $dateString) {
+                $date = DateTime::createFromFormat('U', (int) $dateString, new DateTimeZone('UTC'));
+            } else {
+                $date = new DateTime($dateString, new DateTimeZone('UTC'));
+            }
+            return $date->format(DateTime::W3C);
+        } catch (\Exception $e) {
+            throw new InvalidArgumentException("Malformed last modified date: {$dateString}", 0, $e);
+        }
     }
 }

@@ -36,7 +36,7 @@ class Sitemap extends AbstractSitemap
         $node->appendChild(new DOMElement('loc', $this->escapeString($url)));
 
         if (! is_null($lastModified)) {
-            $node->appendChild(new DOMElement('lastmod', $lastModified));
+            $node->appendChild(new DOMElement('lastmod', $this->formatDate($lastModified)));
         }
 
         if (! is_null($changeFrequency)) {
