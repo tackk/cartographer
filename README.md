@@ -5,6 +5,8 @@ A sitemap generation tool for PHP following the [Sitemap Protocol v0.9](http://w
 Cartographer can handle Sitemaps of any size.  When generating sitemaps with more than 50,000
 entries (the limit), the sitemap becomes a "map of maps" (i.e. nested sitemaps).
 
+**Documentation:** [http://tackk.github.io/cartographer/](http://tackk.github.io/cartographer/)
+
 ## Usage
 
 **Note: This is still a work in progress, so this may change, and it most certainly is not yet stable for
