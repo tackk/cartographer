@@ -40,13 +40,13 @@ echo $sitemap->toString();
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>http://foo.com</loc>
-    <lastmod>2005-01-02</lastmod>
+    <lastmod>2005-01-02T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1</priority>
   </url>
   <url>
     <loc>http://foo.com/about</loc>
-    <lastmod>2005-01-01</lastmod>
+    <lastmod>2005-01-01T00:00:00+00:00</lastmod>
   </url>
 </urlset>
 ```
@@ -75,11 +75,11 @@ echo $sitemapIndex->toString();
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>http://foo.com/sitemaps/sitemap.1.xml</loc>
-    <lastmod>2012-01-02</lastmod>
+    <lastmod>2012-01-02T00:00:00+00:00</lastmod>
   </url>
   <url>
     <loc>http://foo.com/sitemaps/sitemap.2.xml</loc>
-    <lastmod>2012-01-02</lastmod>
+    <lastmod>2012-01-02T00:00:00+00:00</lastmod>
   </url>
 </sitemapindex>
 ```
