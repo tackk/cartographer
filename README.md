@@ -1,11 +1,9 @@
 # Cartographer
 
-A PHP sitemap generation tool.  This tool conforms to the [Sitemap Protocol v0.9](http://www.sitemaps.org/protocol.html).
+A sitemap generation tool for PHP following the [Sitemap Protocol v0.9](http://www.sitemaps.org/protocol.html).
 
 Cartographer can handle Sitemaps of any size.  When generating sitemaps with more than 50,000
 entries (the limit), the sitemap becomes a "map of maps" (i.e. nested sitemaps).
-
-More Information about the Sitemap protocol
 
 ## Usage
 
