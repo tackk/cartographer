@@ -3,6 +3,7 @@ before_commands:
 
 filter:
     excluded_paths: [vendor/*, tests/*]
+    paths: [src/*]
 
 tools:
     php_code_coverage: true
