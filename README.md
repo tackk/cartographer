@@ -1,6 +1,8 @@
 # Cartographer
 
 [![Build Status](https://travis-ci.org/tackk/cartographer.svg)](https://travis-ci.org/tackk/cartographer)
+[![Code Coverage](https://scrutinizer-ci.com/g/tackk/cartographer/badges/coverage.png?s=5547a47fb7e014a26cc4b43f69832f82b673d8ba)](https://scrutinizer-ci.com/g/tackk/cartographer/)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/tackk/cartographer/badges/quality-score.png?s=47b9d98507fa3ea5be94ef3656a3de5a5bff662d)](https://scrutinizer-ci.com/g/tackk/cartographer/)
 
 A sitemap generation tool for PHP following the [Sitemap Protocol v0.9](http://www.sitemaps.org/protocol.html).
 
