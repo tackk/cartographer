@@ -1,5 +1,13 @@
 before_commands:
     - "composer install --prefer-source"
 
+filter:
+    excluded_paths: [vendor/*, tests/*]
+
 tools:
     php_code_coverage: true
+    php_sim: true
+    php_pdepend: true
+    php_analyzer: true
+    php_code_coverage: true
+
