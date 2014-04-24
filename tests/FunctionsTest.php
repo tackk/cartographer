@@ -32,8 +32,8 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
 
     public function testGetPropertyFromNonObject()
     {
-        $entry = 'foo';
-        $this->assertEquals(null, Cartographer\get_property($entry, 'foo'));
-        $this->assertEquals(false, Cartographer\get_property($entry, 'foobar', false));
+		$this->setExpectedException('InvalidArgumentException',
+			'Invalid Entry Type: Entry must be an array, or an object, string given.');
+        Cartographer\get_property('foo', 'foo');
     }
 }

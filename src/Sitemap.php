@@ -31,7 +31,7 @@ class Sitemap extends AbstractSitemap
     public function add($loc, $lastmod = null, $changefreq = null, $priority = null)
     {
         $loc = $this->escapeString($loc);
-        $lastmod = $this->formatDate($lastmod);
+        $lastmod = ! is_null($lastmod) ? $this->formatDate($lastmod) : null;
         return $this->addUrlToDocument(compact('loc', 'lastmod', 'changefreq', 'priority'));
     }
 }

@@ -67,4 +67,14 @@ XML;
         $actual = $this->generator->generate();
         $this->assertEquals($expected, $actual);
     }
+
+	public function testUrlMustBePresent()
+	{
+		$this->generator->setIterator(new ArrayIterator([
+			[],
+		]));
+
+		$this->setExpectedException('InvalidArgumentException', 'Url is missing or not accessible.');
+		$actual = $this->generator->generate();
+	}
 }

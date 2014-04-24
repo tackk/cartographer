@@ -158,10 +158,6 @@ abstract class AbstractSitemap
      */
     protected function formatDate($dateString)
     {
-        if (is_null($dateString)) {
-            return null;
-        }
-
         try {
             // We have to handle timestamps a little differently
             if (is_numeric($dateString) && (int) $dateString == $dateString) {

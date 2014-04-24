@@ -65,17 +65,13 @@ class Generator
      */
     protected function parseEntry($entry)
     {
-        if (is_array($entry) || $entry instanceof \ArrayAccess || is_object($entry)) {
-            if (! get_property($entry, 'url')) {
-                throw new \InvalidArgumentException('The entry is missing the "url" property.');
-            }
-            $url        = get_property($entry, 'url');
-            $lastmod    = get_property($entry, 'lastmod');
-            $changefreq = get_property($entry, 'changefreq');
-            $priority   = get_property($entry, 'priority');
-        } else {
-            throw new \InvalidArgumentException('The entry must either be an array, implement the ArrayAccess interface or be an object.');
-        }
+		if (! get_property($entry, 'url')) {
+			throw new \InvalidArgumentException('Url is missing or not accessible.');
+		}
+		$url        = get_property($entry, 'url');
+		$lastmod    = get_property($entry, 'lastmod');
+		$changefreq = get_property($entry, 'changefreq');
+		$priority   = get_property($entry, 'priority');
 
         return [$url, $lastmod, $changefreq, $priority];
     }
