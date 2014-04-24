@@ -9,7 +9,9 @@ use DOMElement;
 use InvalidArgumentException;
 use RuntimeException;
 
-class MaxUrlCountExceededException extends RuntimeException {}
+class MaxUrlCountExceededException extends RuntimeException
+{
+}
 
 
 abstract class AbstractSitemap
@@ -63,8 +65,10 @@ abstract class AbstractSitemap
     public function __construct()
     {
         $this->document = new DOMDocument($this->xmlVersion, $this->xmlEncoding);
-        $this->document->formatOutput = true;
         $this->rootNode = $this->document->createElementNS($this->xmlNamespaceUri, $this->getRootNodeName());
+
+        // Make the output Pretty
+        $this->document->formatOutput = true;
     }
 
     /**
@@ -105,7 +109,7 @@ abstract class AbstractSitemap
      */
     public function __toString()
     {
-        if (! $this->isFrozen()) {
+        if (!$this->isFrozen()) {
             $this->freeze();
         }
 
@@ -146,7 +150,8 @@ abstract class AbstractSitemap
     protected function escapeString($string)
     {
         $from = ['&', '\'', '"', '>', '<'];
-        $to = ['&amp;', '&apos;', '&quot;', '&gt;', '&lt;'];
+        $to   = ['&amp;', '&apos;', '&quot;', '&gt;', '&lt;'];
+
         return str_replace($from, $to, $string);
     }
 
@@ -165,6 +170,7 @@ abstract class AbstractSitemap
             } else {
                 $date = new DateTime($dateString, new DateTimeZone('UTC'));
             }
+
             return $date->format(DateTime::W3C);
         } catch (\Exception $e) {
             throw new InvalidArgumentException("Malformed last modified date: {$dateString}", 0, $e);

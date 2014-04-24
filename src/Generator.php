@@ -3,8 +3,8 @@
 namespace Tackk\Cartographer;
 
 use Iterator;
-use RuntimeException;
 use League\Flysystem\FilesystemInterface;
+use RuntimeException;
 
 class Generator
 {
@@ -17,6 +17,7 @@ class Generator
      * @var Iterator
      */
     protected $iterator;
+
     /**
      * @param FilesystemInterface $filesystem
      */
@@ -54,6 +55,7 @@ class Generator
             list($url, $lastmod, $changefreq, $priority) = $this->parseEntry($entry);
             $sitemap->add($url, $lastmod, $changefreq, $priority);
         }
+
         return $sitemap->toString();
     }
 
@@ -65,13 +67,13 @@ class Generator
      */
     protected function parseEntry($entry)
     {
-		if (! get_property($entry, 'url')) {
-			throw new \InvalidArgumentException('Url is missing or not accessible.');
-		}
-		$url        = get_property($entry, 'url');
-		$lastmod    = get_property($entry, 'lastmod');
-		$changefreq = get_property($entry, 'changefreq');
-		$priority   = get_property($entry, 'priority');
+        if (!get_property($entry, 'url')) {
+            throw new \InvalidArgumentException('Url is missing or not accessible.');
+        }
+        $url        = get_property($entry, 'url');
+        $lastmod    = get_property($entry, 'lastmod');
+        $changefreq = get_property($entry, 'changefreq');
+        $priority   = get_property($entry, 'priority');
 
         return [$url, $lastmod, $changefreq, $priority];
     }

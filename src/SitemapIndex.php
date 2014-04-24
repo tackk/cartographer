@@ -17,8 +17,9 @@ class SitemapIndex extends AbstractSitemap
      */
     public function add($loc, $lastmod)
     {
-        $loc = $this->escapeString($loc);
-		$lastmod = ! is_null($lastmod) ? $this->formatDate($lastmod) : null;
+        $loc     = $this->escapeString($loc);
+        $lastmod = !is_null($lastmod) ? $this->formatDate($lastmod) : null;
+
         return $this->addUrlToDocument(compact('loc', 'lastmod'));
     }
 }
