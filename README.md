@@ -101,7 +101,8 @@ $adapter = new LocalAdapter(__DIR__);
 $filesystem = new Filesystem($adapter);
 $sitemapFactory = new Tackk\Cartographer\SitemapFactory($filesystem);
 
-$sitemapFactory->create(get_sitemap_links());
+// $sitemap is a string (this will be saved to the Filesystem eventually)
+$sitemap = $sitemapFactory->create(get_sitemap_links());
 
 /**
  * Generates an iterator for the SitemapFactory to use to
@@ -110,7 +111,7 @@ $sitemapFactory->create(get_sitemap_links());
  */
 function get_sitemap_links()
 {
-    $results = execute_unbuffered_query();
+    $result = execute_unbuffered_query();
 
     while ($link = $result->fetch()) {
         yield [$link->url, $link->lastModified];
