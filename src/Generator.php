@@ -4,7 +4,6 @@ namespace Tackk\Cartographer;
 
 use Iterator;
 use RuntimeException;
-
 use League\Flysystem\FilesystemInterface;
 
 class Generator
