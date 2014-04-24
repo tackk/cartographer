@@ -88,7 +88,7 @@ echo $sitemapIndex->toString();
 </sitemapindex>
 ```
 
-### Sitemap Generator
+### Sitemap Factory
 
 **Still under heavy development.  DO NOT USE.**
 
@@ -99,7 +99,23 @@ use League\Flysystem\Adapter\Local as LocalAdapter;
 
 $adapter = new LocalAdapter(__DIR__);
 $filesystem = new Filesystem($adapter);
-$generator = new Tackk\Cartographer\Generator($filesystem);
+$sitemapFactory = new Tackk\Cartographer\SitemapFactory($filesystem);
+
+$sitemapFactory->create(get_sitemap_links());
+
+/**
+ * Generates an iterator for the SitemapFactory to use to
+ * create the sitemap.
+ * @return Iterator
+ */
+function get_sitemap_links()
+{
+    $results = execute_unbuffered_query();
+
+    while ($link = $result->fetch()) {
+        yield [$link->url, $link->lastModified];
+    }
+}
 ```
 
 ## Running Tests

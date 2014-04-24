@@ -6,17 +6,12 @@ use Iterator;
 use League\Flysystem\FilesystemInterface;
 use RuntimeException;
 
-class Generator
+class SitemapFactory
 {
     /**
      * @var FilesystemInterface
      */
     protected $filesystem = null;
-
-    /**
-     * @var Iterator
-     */
-    protected $iterator;
 
     /**
      * @param FilesystemInterface $filesystem
@@ -36,22 +31,15 @@ class Generator
     }
 
     /**
-     * Set the Iterator to use.
-     * @param Iterator $iterator
+     * Generates the sitemap(s) using the iterator previously set.
+     * @param \Iterator $iterator
+     * @throws \RuntimeException
+     * @return string
      */
-    public function setIterator(Iterator $iterator)
+    public function create(Iterator $iterator)
     {
-        $this->iterator = $iterator;
-    }
-
-    public function generate()
-    {
-        if (is_null($this->iterator)) {
-            throw new RuntimeException('An Iterator must be set before generation.');
-        }
-
         $sitemap = new Sitemap();
-        foreach ($this->iterator as $entry) {
+        foreach ($iterator as $entry) {
             list($url, $lastmod, $changefreq, $priority) = $this->parseEntry($entry);
             $sitemap->add($url, $lastmod, $changefreq, $priority);
         }

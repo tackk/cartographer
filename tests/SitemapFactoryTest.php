@@ -5,43 +5,34 @@ use League\Flysystem\Adapter\Local as LocalAdapter;
 class GeneratorTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var Tackk\Cartographer\Generator
+     * @var Tackk\Cartographer\SitemapFactory
      */
-    protected $generator;
+    protected $factory;
 
     public function setUp()
     {
         $adapter = new LocalAdapter(dirname(__DIR__).'/storage');
         $filesystem = new Filesystem($adapter);
-        $this->generator = new Tackk\Cartographer\Generator($filesystem);
+        $this->factory = new Tackk\Cartographer\SitemapFactory($filesystem);
     }
 
     public function testCanInstantiate()
     {
-        $this->assertInstanceOf('Tackk\Cartographer\Generator', $this->generator);
+        $this->assertInstanceOf('Tackk\Cartographer\SitemapFactory', $this->factory);
     }
 
     public function testGetFilesystem()
     {
-        $this->assertInstanceOf('League\Flysystem\FilesystemInterface', $this->generator->getFilesystem());
+        $this->assertInstanceOf('League\Flysystem\FilesystemInterface', $this->factory->getFilesystem());
     }
 
-    public function testSetIteratorThroughSetter()
+    public function testCreateRequiresIterator()
     {
-        $this->generator->setIterator(new ArrayIterator());
-        $this->assertAttributeInstanceOf('Iterator', 'iterator', $this->generator);
-
         $this->setExpectedException('PHPUnit_Framework_Error');
-        $this->generator->setIterator('foo');
+        $this->factory->create();
     }
 
-    public function testGenerateRequiresIterator()
-    {
-        $this->setExpectedException('RuntimeException');
-        $this->generator->generate();
-    }
-
-    public function testCanGenerateSmallSitemap()
+    public function testCanCreateSmallSitemap()
     {
         $expected = <<<XML
 <?xml version="1.0" encoding="UTF-8"?>
@@ -58,23 +49,17 @@ class GeneratorTest extends PHPUnit_Framework_TestCase
 </urlset>
 
 XML;
-        $this->generator->setIterator(new ArrayIterator([
+        $actual = $this->factory->create(new ArrayIterator([
             ['url' => 'http://foo.com/1'],
             ['url' => 'http://foo.com/2'],
             ['url' => 'http://foo.com/3'],
         ]));
-
-        $actual = $this->generator->generate();
         $this->assertEquals($expected, $actual);
     }
 
     public function testUrlMustBePresent()
     {
-        $this->generator->setIterator(new ArrayIterator([
-            [],
-        ]));
-
         $this->setExpectedException('InvalidArgumentException', 'Url is missing or not accessible.');
-        $actual = $this->generator->generate();
+        $this->factory->create(new ArrayIterator([[]]));
     }
 }
