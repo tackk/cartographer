@@ -1,5 +1,7 @@
 # Cartographer
 
+[![Build Status](https://travis-ci.org/tackk/cartographer.svg)](https://travis-ci.org/tackk/cartographer)
+
 A sitemap generation tool for PHP following the [Sitemap Protocol v0.9](http://www.sitemaps.org/protocol.html).
 
 Cartographer can handle Sitemaps of any size.  When generating sitemaps with more than 50,000
