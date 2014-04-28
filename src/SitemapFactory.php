@@ -38,13 +38,38 @@ class SitemapFactory
      */
     public function create(Iterator $iterator)
     {
-        $sitemap = new Sitemap();
+        $sitemapList = [];
+        $currentSitemap = new Sitemap();
         foreach ($iterator as $entry) {
             list($url, $lastmod, $changefreq, $priority) = $this->parseEntry($entry);
-            $sitemap->add($url, $lastmod, $changefreq, $priority);
+            $currentSitemap->add($url, $lastmod, $changefreq, $priority);
+
+            if ($currentSitemap->getUrlCount() === Sitemap::MAX_URLS) {
+                array_push($sitemapList, $currentSitemap);
+                $currentSitemap = new Sitemap();
+            }
         }
 
-        return $sitemap->toString();
+        return $this->writeSitemap($currentSitemap);
+    }
+
+    /**
+     * Writes the given sitemap to the filesystem.  The filename pattern is:
+     * {MD5_Hash}.{Class_Name}.{Index}.xml
+     * @param AbstractSitemap $sitemap
+     * @return string The filename of the sitemap written
+     */
+    protected function writeSitemap(AbstractSitemap $sitemap)
+    {
+        static $index = 0;
+
+        $prefix = $this->randomHash();
+        $className = (new \ReflectionClass($sitemap))->getShortName();
+        $fileName = "{$prefix}.{$className}.{$index}.xml";
+        $this->filesystem->write($fileName, $sitemap->toString());
+        $index++;
+
+        return $fileName;
     }
 
     /**
@@ -64,5 +89,32 @@ class SitemapFactory
         $priority   = get_property($entry, 'priority');
 
         return [$url, $lastmod, $changefreq, $priority];
+    }
+
+    /**
+     * Generates a random MD5 hash.
+     * @return string
+     * @throws \RuntimeException
+     */
+    protected function randomHash()
+    {
+        return md5($this->randomBytes(32));
+    }
+
+    /**
+     * Generates a string of random bytes (of given length).
+     * @param  integer $bytes The number of bytes to return.
+     * @return string
+     * @codeCoverageIgnore
+     */
+    protected function randomBytes($bytes = 32)
+    {
+        if (extension_loaded('openssl')) {
+            return openssl_random_pseudo_bytes($bytes);
+        } elseif (extension_loaded('mcrypt')) {
+            return mcrypt_create_iv($bytes, MCRYPT_DEV_URANDOM);
+        }
+
+        throw new RuntimeException('Extension "openssl" or "mcrpypt" is required, but is not installed.');
     }
 }

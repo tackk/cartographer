@@ -9,11 +9,16 @@ class GeneratorTest extends PHPUnit_Framework_TestCase
      */
     protected $factory;
 
+    /**
+     * @var League\Flysystem\Filesystem
+     */
+    protected $filesystem;
+
     public function setUp()
     {
-        $adapter = new LocalAdapter(dirname(__DIR__).'/storage');
-        $filesystem = new Filesystem($adapter);
-        $this->factory = new Tackk\Cartographer\SitemapFactory($filesystem);
+        $adapter = new LocalAdapter(__DIR__.'/storage/sitemaps');
+        $this->filesystem = new Filesystem($adapter);
+        $this->factory = new Tackk\Cartographer\SitemapFactory($this->filesystem);
     }
 
     public function testCanInstantiate()
@@ -49,11 +54,14 @@ class GeneratorTest extends PHPUnit_Framework_TestCase
 </urlset>
 
 XML;
-        $actual = $this->factory->create(new ArrayIterator([
+        $path = $this->factory->create(new ArrayIterator([
             ['url' => 'http://foo.com/1'],
             ['url' => 'http://foo.com/2'],
             ['url' => 'http://foo.com/3'],
         ]));
+
+        $actual = $this->filesystem->read($path);
+        $this->filesystem->delete($path);
         $this->assertEquals($expected, $actual);
     }
 
