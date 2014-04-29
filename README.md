@@ -114,7 +114,10 @@ function get_sitemap_links()
     $result = execute_unbuffered_query();
 
     while ($link = $result->fetch()) {
-        yield [$link->url, $link->lastModified];
+        yield [
+            'url' => $link->url,
+            'lastmod' => $link->lastModified,
+        ];
     }
 }
 ```
