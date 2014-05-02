@@ -90,37 +90,69 @@ echo $sitemapIndex->toString();
 
 ### Sitemap Factory
 
-**Still under heavy development.  DO NOT USE.**
+The Sitemap Factory create Sitemaps and Sitemap Indexes and writes them to the Filesystem.
+Is is can be used to generate full Sitemaps with more than **50,000** URLs.
+
+If more than one sitemap is generated, it will create a Sitemap Index automatically.
+
+#### Instantiating
+
+The factory uses [Flysystem](http://flysystem.thephpleague.com/) to write the sitemaps.  This
+means you can write the sitemaps to Local Disk, S3, Dropbox, wherever you want.
 
 ``` php
 <?php
+
 use League\Flysystem\Filesystem;
 use League\Flysystem\Adapter\Local as LocalAdapter;
 
-$adapter = new LocalAdapter(__DIR__);
+$adapter = new LocalAdapter(__DIR__.'/sitemaps');
 $filesystem = new Filesystem($adapter);
 $sitemapFactory = new Tackk\Cartographer\SitemapFactory($filesystem);
 
-// $sitemap is a string (this will be saved to the Filesystem eventually)
-$sitemap = $sitemapFactory->create(get_sitemap_links());
-
-/**
- * Generates an iterator for the SitemapFactory to use to
- * create the sitemap.
- * @return Iterator
- */
-function get_sitemap_links()
-{
-    $result = execute_unbuffered_query();
-
-    while ($link = $result->fetch()) {
-        yield [
-            'url' => $link->url,
-            'lastmod' => $link->lastModified,
-        ];
-    }
-}
 ```
+
+#### Base URL
+
+The Base URL is used when generating the Sitemap Indexes, and for the returned entry point URL.
+
+You can set the Base URL:
+
+``` php
+$sitemapFactory->setBaseUrl('http://foo.com/sitemaps/');
+```
+
+You can get the current base URL using `getBaseUrl()`.
+
+#### Creating a Sitemap
+
+To create a sitemap you use the `createSitemap` method.  This method requires an `Iterator` as
+its only parameter.
+
+``` php
+<?php
+
+use League\Flysystem\Filesystem;
+use League\Flysystem\Adapter\Local as LocalAdapter;
+
+$adapter = new LocalAdapter(__DIR__.'/sitemaps');
+$filesystem = new Filesystem($adapter);
+$sitemapFactory = new Tackk\Cartographer\SitemapFactory($filesystem);
+
+// Create an Iterator of your URLs somehow.
+$urls = get_url_iterator();
+
+// Returns the URL to the main Sitemap/Index file
+$mainSitemap = $sitemapFactory->createSitemap($urls);
+
+```
+
+#### Return Value
+
+The two creation methods (`createSitemap` and `createSitemapIndex`) will return the URL
+of the root sitemap file.  If there is only 1 sitemap created, it will return just that URL.
+If multiple sitemaps are created, then a Sitemap Index is generated and the URL to that is returned.
+
 
 ## Running Tests
 
