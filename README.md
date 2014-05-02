@@ -11,12 +11,7 @@ entries (the limit), the sitemap becomes a "map of maps" (i.e. nested sitemaps).
 
 **Documentation:** [http://tackk.github.io/cartographer/](http://tackk.github.io/cartographer/)
 
-## Usage
-
-**Note: This is still a work in progress, so this may change, and it most certainly is not yet stable for
-production.**
-
-### Basic Sitemap
+## Basic Sitemap
 
 If you have a sitemap that is under 50,000 items, you can just use the Sitemap class, and avoid the Sitemap
 Generator.
@@ -37,7 +32,7 @@ header ('Content-Type:text/xml');
 echo $sitemap->toString();
 ```
 
-#### Output
+### Output
 
 ``` xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -55,7 +50,7 @@ echo $sitemap->toString();
 </urlset>
 ```
 
-### Basic Sitemap Index
+## Basic Sitemap Index
 
 If you want to build a Sitemap Index, seperate from the Sitemap Generator, you can!
 
@@ -72,7 +67,7 @@ header ('Content-Type:text/xml');
 echo $sitemapIndex->toString();
 ```
 
-#### Output
+### Output
 
 ``` xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -88,14 +83,14 @@ echo $sitemapIndex->toString();
 </sitemapindex>
 ```
 
-### Sitemap Factory
+## Sitemap Factory
 
 The Sitemap Factory create Sitemaps and Sitemap Indexes and writes them to the Filesystem.
 Is is can be used to generate full Sitemaps with more than **50,000** URLs.
 
 If more than one sitemap is generated, it will create a Sitemap Index automatically.
 
-#### Instantiating
+### Instantiating
 
 The factory uses [Flysystem](http://flysystem.thephpleague.com/) to write the sitemaps.  This
 means you can write the sitemaps to Local Disk, S3, Dropbox, wherever you want.
@@ -112,7 +107,7 @@ $sitemapFactory = new Tackk\Cartographer\SitemapFactory($filesystem);
 
 ```
 
-#### Base URL
+### Base URL
 
 The Base URL is used when generating the Sitemap Indexes, and for the returned entry point URL.
 
@@ -124,7 +119,7 @@ $sitemapFactory->setBaseUrl('http://foo.com/sitemaps/');
 
 You can get the current base URL using `getBaseUrl()`.
 
-#### Creating a Sitemap
+### Creating a Sitemap
 
 To create a sitemap you use the `createSitemap` method.  This method requires an `Iterator` as
 its only parameter.
@@ -147,7 +142,7 @@ $mainSitemap = $sitemapFactory->createSitemap($urls);
 
 ```
 
-#### Return Value
+### Return Value
 
 The two creation methods (`createSitemap` and `createSitemapIndex`) will return the URL
 of the root sitemap file.  If there is only 1 sitemap created, it will return just that URL.
