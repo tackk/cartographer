@@ -99,7 +99,7 @@ class SitemapFactory
             return $this->createSitemapIndex($paths->getIterator());
         }
 
-        return $paths[0];
+        return $this->fileUrl($paths[0]);
     }
 
     /**
@@ -135,7 +135,7 @@ class SitemapFactory
         }
         // @codeCoverageIgnoreEnd
 
-        return $sitemapIndexes[0];
+        return $this->fileUrl($sitemapIndexes[0]);
     }
 
     /**
