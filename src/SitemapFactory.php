@@ -155,7 +155,7 @@ class SitemapFactory
         array_push($this->filesCreated, $fileName);
         $index++;
 
-        return $this->fileUrl($fileName);
+        return $fileName;
     }
 
     /**
