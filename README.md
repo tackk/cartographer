@@ -11,6 +11,24 @@ entries (the limit), the sitemap becomes a "map of maps" (i.e. nested sitemaps).
 
 **Documentation:** [http://tackk.github.io/cartographer/](http://tackk.github.io/cartographer/)
 
+## Installation
+
+### Composer CLI
+
+```
+composer require tackk/cartographer:1.0.*
+```
+
+### composer.json
+
+``` json
+{
+    "require": {
+        "tackk/cartographer": "1.0.*"
+    }
+ }
+ ```
+
 ## Basic Sitemap
 
 If you have a sitemap that is under 50,000 items, you can just use the Sitemap class, and avoid the Sitemap
