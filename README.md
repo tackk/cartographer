@@ -148,6 +148,20 @@ The two creation methods (`createSitemap` and `createSitemapIndex`) will return 
 of the root sitemap file.  If there is only 1 sitemap created, it will return just that URL.
 If multiple sitemaps are created, then a Sitemap Index is generated and the URL to that is returned.
 
+### List of Created Files
+
+You can get a list (array) of files the Factory has created by using the `getFilesCreated` method.
+
+``` php
+$files = $sitemapFactory->getFilesCreated();
+```
+
+### Return Value
+
+The two creation methods (`createSitemap` and `createSitemapIndex`) will return the URL
+of the root sitemap file.  If there is only 1 sitemap created, it will return just that URL.
+If multiple sitemaps are created, then a Sitemap Index is generated and the URL to that is returned.
+
 
 ## Running Tests
 
