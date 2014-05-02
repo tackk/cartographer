@@ -20,6 +20,11 @@ class Sitemap extends AbstractSitemap
         return 'urlset';
     }
 
+    protected function getNodeName()
+    {
+        return 'url';
+    }
+
     /**
      * Adds the URL to the urlset.
      * @param  string     $loc

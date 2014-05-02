@@ -9,6 +9,11 @@ class SitemapIndex extends AbstractSitemap
         return 'sitemapindex';
     }
 
+    protected function getNodeName()
+    {
+        return 'sitemap';
+    }
+
     /**
      * Adds the URL to the sitemapindex.
      * @param  string     $loc

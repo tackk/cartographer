@@ -8,6 +8,11 @@ class MockAbstractSitemap extends AbstractSitemap
     {
         return 'urlset';
     }
+
+    protected function getNodeName()
+    {
+        return 'url';
+    }
 }
 
 class AbstractSitemapTest extends PHPUnit_Framework_TestCase

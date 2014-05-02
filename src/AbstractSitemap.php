@@ -25,6 +25,12 @@ abstract class AbstractSitemap
     abstract protected function getRootNodeName();
 
     /**
+     * Get the node name for the sitemap (e.g. 'url').
+     * @return string
+     */
+    abstract protected function getNodeName();
+
+    /**
      * @var string
      */
     protected $xmlVersion = '1.0';
@@ -137,7 +143,7 @@ abstract class AbstractSitemap
             throw new MaxUrlCountExceededException('Maximum number of URLs has been reached, cannot add more.');
         }
 
-        $node = $this->document->createElement('url');
+        $node = $this->document->createElement($this->getNodeName());
 
         foreach ($urlArray as $key => $value) {
             if (is_null($value)) {
