@@ -2,6 +2,8 @@
 
 namespace Tackk\Cartographer;
 
+use ArrayObject;
+use DateTime;
 use Iterator;
 use League\Flysystem\FilesystemInterface;
 use RuntimeException;
@@ -12,6 +14,16 @@ class SitemapFactory
      * @var FilesystemInterface
      */
     protected $filesystem = null;
+
+    /**
+     * @var string
+     */
+    protected $baseUrl = '';
+
+    /**
+     * @var array
+     */
+    protected $filesCreated = [];
 
     /**
      * @param FilesystemInterface $filesystem
@@ -31,45 +43,119 @@ class SitemapFactory
     }
 
     /**
+     * Sets the Base URL for sitemap files.
+     *
+     * @param  string $baseUrl
+     * @return $this
+     */
+    public function setBaseUrl($baseUrl)
+    {
+        $this->baseUrl = rtrim($baseUrl, '/');
+
+        return $this;
+    }
+
+    /**
+     * Gets the Base URL for sitemap files.
+     * @return string
+     */
+    public function getBaseUrl()
+    {
+        return $this->baseUrl;
+    }
+
+    /**
+     * Gets the array of files created.
+     * @return array
+     */
+    public function getFilesCreated()
+    {
+        return $this->filesCreated;
+    }
+
+    /**
      * Generates the sitemap(s) using the iterator previously set.
      * @param \Iterator $iterator
      * @throws \RuntimeException
-     * @return string
+     * @return string The URL for the entry Sitemap
      */
-    public function create(Iterator $iterator)
+    public function createSitemap(Iterator $iterator)
     {
-        $sitemapList = [];
-        $currentSitemap = new Sitemap();
+        $groupName = $this->randomHash();
+        $paths = new ArrayObject();
+        $sitemap = new Sitemap();
         foreach ($iterator as $entry) {
-            list($url, $lastmod, $changefreq, $priority) = $this->parseEntry($entry);
-            $currentSitemap->add($url, $lastmod, $changefreq, $priority);
-
-            if ($currentSitemap->getUrlCount() === Sitemap::MAX_URLS) {
-                array_push($sitemapList, $currentSitemap);
-                $currentSitemap = new Sitemap();
+            if ($sitemap->getUrlCount() === Sitemap::MAX_URLS) {
+                $paths->append($this->writeSitemap($groupName, $sitemap));
+                $sitemap = new Sitemap();
             }
+
+            list($url, $lastmod, $changefreq, $priority) = $this->parseEntry($entry);
+            $sitemap->add($url, $lastmod, $changefreq, $priority);
+        }
+        $paths->append($this->writeSitemap($groupName, $sitemap));
+
+        if ($paths->count() > 1) {
+            return $this->createSitemapIndex($paths->getIterator());
         }
 
-        return $this->writeSitemap($currentSitemap);
+        return $paths[0];
+    }
+
+    /**
+     * Creates a Sitemap index given an Iterator of Sitemaps
+     * @param Iterator $sitemaps
+     * @return mixed
+     */
+    public function createSitemapIndex(Iterator $sitemaps)
+    {
+        $groupName = $this->randomHash();
+        $sitemapIndexes = new ArrayObject();
+        $sitemapIndex = new SitemapIndex();
+        $lastmod = date(DateTime::W3C);
+        foreach ($sitemaps as $sitemapPath) {
+            // Ignoring because this is an edge case for HUGE sites...like Facebook.
+            // @codeCoverageIgnoreStart
+            if ($sitemapIndex->getUrlCount() === Sitemap::MAX_URLS) {
+                $sitemapIndexes->append($this->writeSitemap($groupName, $sitemapIndex));
+                $sitemapIndex = new SitemapIndex();
+            }
+            // @codeCoverageIgnoreEnd
+
+            $sitemapIndex->add($this->fileUrl($sitemapPath), $lastmod);
+        }
+        $sitemapIndexes->append($this->writeSitemap($groupName, $sitemapIndex));
+
+        // This will probably never happen, as it would mean over 2.5 Billion URLs in the
+        // sitemap.  So unless Facebook uses this library, this will never happen, so ignore
+        // it from code coverage.
+        // @codeCoverageIgnoreStart
+        if ($sitemapIndexes->count() > 1) {
+            return $this->createSitemapIndex($sitemapIndexes->getIterator());
+        }
+        // @codeCoverageIgnoreEnd
+
+        return $sitemapIndexes[0];
     }
 
     /**
      * Writes the given sitemap to the filesystem.  The filename pattern is:
      * {MD5_Hash}.{Class_Name}.{Index}.xml
+     * @param string          $groupName
      * @param AbstractSitemap $sitemap
      * @return string The filename of the sitemap written
      */
-    protected function writeSitemap(AbstractSitemap $sitemap)
+    protected function writeSitemap($groupName, AbstractSitemap $sitemap)
     {
         static $index = 0;
 
-        $prefix = $this->randomHash();
         $className = (new \ReflectionClass($sitemap))->getShortName();
-        $fileName = "{$prefix}.{$className}.{$index}.xml";
+        $fileName = "{$groupName}.{$className}.{$index}.xml";
         $this->filesystem->write($fileName, $sitemap->toString());
+        array_push($this->filesCreated, $fileName);
         $index++;
 
-        return $fileName;
+        return $this->fileUrl($fileName);
     }
 
     /**
@@ -102,8 +188,19 @@ class SitemapFactory
     }
 
     /**
+     * Gets the Full URL for the given file.
+     * @param  string $file
+     * @return string
+     */
+    protected function fileUrl($file)
+    {
+        return $this->baseUrl.'/'.ltrim($file, '/');
+    }
+
+    /**
      * Generates a string of random bytes (of given length).
      * @param  integer $bytes The number of bytes to return.
+     * @throws \RuntimeException
      * @return string
      * @codeCoverageIgnore
      */
