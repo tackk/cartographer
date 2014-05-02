@@ -85,7 +85,7 @@ class SitemapFactory
         $paths = new ArrayObject();
         $sitemap = new Sitemap();
         foreach ($iterator as $entry) {
-            if ($sitemap->getUrlCount() === Sitemap::MAX_URLS) {
+            if ($sitemap->hasMaxUrlCount()) {
                 $paths->append($this->writeSitemap($groupName, $sitemap));
                 $sitemap = new Sitemap();
             }
@@ -116,7 +116,7 @@ class SitemapFactory
         foreach ($sitemaps as $sitemapPath) {
             // Ignoring because this is an edge case for HUGE sites...like Facebook.
             // @codeCoverageIgnoreStart
-            if ($sitemapIndex->getUrlCount() === Sitemap::MAX_URLS) {
+            if ($sitemapIndex->hasMaxUrlCount()) {
                 $sitemapIndexes->append($this->writeSitemap($groupName, $sitemapIndex));
                 $sitemapIndex = new SitemapIndex();
             }

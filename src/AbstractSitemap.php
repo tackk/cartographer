@@ -95,6 +95,15 @@ abstract class AbstractSitemap
     }
 
     /**
+     * Checks if the sitemap contains the maximum URL count.
+     * @return bool
+     */
+    public function hasMaxUrlCount()
+    {
+        return $this->urlCount === static::MAX_URLS;
+    }
+
+    /**
      * Converts the Sitemap to an XML string.
      * @return string
      */
@@ -124,7 +133,7 @@ abstract class AbstractSitemap
      */
     protected function addUrlToDocument(array $urlArray)
     {
-        if ($this->getUrlCount() >= AbstractSitemap::MAX_URLS) {
+        if ($this->hasMaxUrlCount()) {
             throw new MaxUrlCountExceededException('Maximum number of URLs has been reached, cannot add more.');
         }
 
