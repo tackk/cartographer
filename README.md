@@ -18,11 +18,11 @@ entries (the limit), the sitemap becomes a "map of maps" (i.e. nested sitemaps).
 
 ## Requirements
 
-* PHP >= 5.4 (including 5.6beta1)
+PHP >= 5.4 (including 5.6 beta1)
 
 **or**
 
-* HHVM >= 3.0.0
+HHVM >= 3.0.0
 
 ## Installation
 
