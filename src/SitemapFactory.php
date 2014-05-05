@@ -212,6 +212,6 @@ class SitemapFactory
             return mcrypt_create_iv($bytes, MCRYPT_DEV_URANDOM);
         }
 
-        throw new RuntimeException('Extension "openssl" or "mcrpypt" is required, but is not installed.');
+        throw new RuntimeException('Extension "openssl" or "mcrypt" is required, but is not installed.');
     }
 }
