@@ -1,6 +1,7 @@
 {
     "name": "tackk/cartographer",
     "description": "A PHP sitemap generation tool.",
+    "keywords": ["sitemap", "generator"],
     "license": "MIT",
     "authors": [
         {
@@ -13,6 +14,7 @@
         "phpunit/phpunit": "4.0.*"
     },
     "require": {
+        "php": ">=5.4",
         "league/flysystem": "0.4.*"
     },
     "autoload": {
