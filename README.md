@@ -80,7 +80,7 @@ echo $sitemap->toString();
 
 ## Basic Sitemap Index
 
-If you want to build a Sitemap Index, seperate from the Sitemap Generator, you can!
+If you want to build a Sitemap Index, separate from the Sitemap Generator, you can!
 
 ``` php
 $sitemapIndex = new Tackk\Cartographer\SitemapIndex();
