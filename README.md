@@ -16,13 +16,10 @@ entries (the limit), the sitemap becomes a "map of maps" (i.e. nested sitemaps).
 * **GitHub Repo:** [http://github.com/tackk/cartographer/](http://github.com/tackk/cartographer/)
 * **Documentation:** [http://tackk.github.io/cartographer/](http://tackk.github.io/cartographer/)
 
-## Requirements
+## Supported PHP/HHVM Versions
 
-PHP >= 5.4 (including 5.6 beta1)
-
-**or**
-
-HHVM >= 3.0.0
+* **PHP:** >= 5.4 (including 5.6 beta1)
+* **HHVM:** >= 3.0.0
 
 ## Installation
 
@@ -39,8 +36,8 @@ composer require tackk/cartographer:1.0.*
     "require": {
         "tackk/cartographer": "1.0.*"
     }
- }
- ```
+}
+```
 
 ## Basic Sitemap
 
