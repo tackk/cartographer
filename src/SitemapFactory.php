@@ -74,6 +74,20 @@ class SitemapFactory
     }
 
     /**
+     * @return AbstractSitemap
+     */
+    protected function instantiateNewSitemap()
+    {
+        return new Sitemap();
+    }
+
+    protected function addEntry($entry, Sitemap $sitemap)
+    {
+        list($url, $lastmod, $changefreq, $priority) = $this->parseEntry($entry);
+        $sitemap->add($url, $lastmod, $changefreq, $priority);
+    }
+
+    /**
      * Generates the sitemap(s) using the iterator previously set.
      * @param \Iterator $iterator
      * @throws \RuntimeException
@@ -83,15 +97,14 @@ class SitemapFactory
     {
         $groupName = $this->randomHash();
         $paths = new ArrayObject();
-        $sitemap = new Sitemap();
+        $sitemap = $this->instantiateNewSitemap();
         foreach ($iterator as $entry) {
             if ($sitemap->hasMaxUrlCount()) {
                 $paths->append($this->writeSitemap($groupName, $sitemap));
-                $sitemap = new Sitemap();
+                $sitemap = $this->instantiateNewSitemap();
             }
 
-            list($url, $lastmod, $changefreq, $priority) = $this->parseEntry($entry);
-            $sitemap->add($url, $lastmod, $changefreq, $priority);
+            $this->addEntry($entry, $sitemap);
         }
         $paths->append($this->writeSitemap($groupName, $sitemap));
 

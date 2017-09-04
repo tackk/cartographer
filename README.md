@@ -8,6 +8,8 @@
 [![Code Coverage](https://scrutinizer-ci.com/g/tackk/cartographer/badges/coverage.png?s=5547a47fb7e014a26cc4b43f69832f82b673d8ba)](https://scrutinizer-ci.com/g/tackk/cartographer/)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/tackk/cartographer/badges/quality-score.png?s=47b9d98507fa3ea5be94ef3656a3de5a5bff662d)](https://scrutinizer-ci.com/g/tackk/cartographer/)
 
+----
+
 A sitemap generation tool for PHP following the [Sitemap Protocol v0.9](http://www.sitemaps.org/protocol.html).
 
 Cartographer can handle Sitemaps of any size.  When generating sitemaps with more than 50,000
@@ -169,6 +171,53 @@ $urls = get_url_iterator();
 $mainSitemap = $sitemapFactory->createSitemap($urls);
 
 ```
+
+
+### Google image extension
+
+With simple sitemap:
+
+```php
+<?php
+
+use Tackk\Cartographer\GoogleSitemap;
+use Tackk\Cartographer\ChangeFrequency;
+
+$sitemap = new Tackk\Cartographer\GoogleSitemap();
+$sitemap->add('http://foo.com', '2005-01-02', ChangeFrequency::WEEKLY, 1.0);
+// Adds an image for the previous url
+$sitemap->addImage('http://foo.com/bar.jpg', 'image title', 'image caption', 'geo location', 'license');
+
+// Write it to a file
+file_put_contents('sitemap.xml', (string) $sitemap);
+```
+
+
+With sitemap factory the iterator should return an array of url that also contains an 'images' key with all images of the url.
+
+```php
+<?php
+
+use League\Flysystem\Filesystem;
+use League\Flysystem\Adapter\Local as LocalAdapter;
+
+$adapter = new LocalAdapter(__DIR__.'/sitemaps');
+$filesystem = new Filesystem($adapter);
+$sitemapFactory = new Tackk\Cartographer\GoogleSitemapFactory($filesystem);
+
+// Create an Iterator of your URLs somehow.
+$urls = get_url_iterator();
+
+// Url iterator items format:
+// ['url' => 'http://foo.com', 'images' => [
+//    ['loc' => 'http://foo.com/bar.jpg']
+// ]
+
+// Returns the URL to the main Sitemap/Index file
+$mainSitemap = $sitemapFactory->createSitemap($urls);
+
+```
+
 
 ### Return Value
 
