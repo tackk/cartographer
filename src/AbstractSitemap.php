@@ -7,11 +7,7 @@ use DateTimeZone;
 use DOMDocument;
 use DOMElement;
 use InvalidArgumentException;
-use RuntimeException;
 
-class MaxUrlCountExceededException extends RuntimeException
-{
-}
 
 
 abstract class AbstractSitemap
@@ -29,6 +25,11 @@ abstract class AbstractSitemap
      * @return string
      */
     abstract protected function getNodeName();
+
+    protected function getNamespaceExtensions()
+    {
+        return [];
+    }
 
     /**
      * @var string
@@ -65,6 +66,8 @@ abstract class AbstractSitemap
      */
     protected $urlCount = 0;
 
+    private $lastUrlNode = null;
+
     /**
      * Sets up the sitemap XML document and urlset node.
      */
@@ -72,6 +75,10 @@ abstract class AbstractSitemap
     {
         $this->document = new DOMDocument($this->xmlVersion, $this->xmlEncoding);
         $this->rootNode = $this->document->createElementNS($this->xmlNamespaceUri, $this->getRootNodeName());
+
+        foreach ($this->getNamespaceExtensions() as $qualifiedName => $value) {
+            $this->rootNode->setAttributeNS('http://www.w3.org/2000/xmlns/', $qualifiedName, $value);
+        }
 
         // Make the output Pretty
         $this->document->formatOutput = true;
@@ -154,7 +161,17 @@ abstract class AbstractSitemap
         $this->rootNode->appendChild($node);
         $this->urlCount++;
 
+        $this->lastUrlNode = $node;
+
         return $this;
+    }
+
+    /**
+     * @return DOMElement|null
+     */
+    public function getLastUrlNode()
+    {
+        return $this->lastUrlNode;
     }
 
     /**
