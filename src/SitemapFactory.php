@@ -21,6 +21,11 @@ class SitemapFactory
     protected $baseUrl = '';
 
     /**
+     * @var string
+     */
+    protected $groupName = '';
+
+    /**
      * @var array
      */
     protected $filesCreated = [];
@@ -31,6 +36,7 @@ class SitemapFactory
     public function __construct(FilesystemInterface $filesystem)
     {
         $this->filesystem = $filesystem;
+        $this->groupName = $this->randomHash();
     }
 
     /**
@@ -65,6 +71,28 @@ class SitemapFactory
     }
 
     /**
+     * Sets the Group Name for sitemap file names.
+     *
+     * @param  string $groupName
+     * @return $this
+     */
+    public function setGroupName($groupName)
+    {
+        $this->groupName = $groupName;
+
+        return $this;
+    }
+
+    /**
+     * Gets the Group Name for sitemap file names.
+     * @return string
+     */
+    public function getGroupName()
+    {
+        return $this->groupName;
+    }
+
+    /**
      * Gets the array of files created.
      * @return array
      */
@@ -81,7 +109,7 @@ class SitemapFactory
      */
     public function createSitemap(Iterator $iterator)
     {
-        $groupName = $this->randomHash();
+        $groupName = $this->groupName;
         $paths = new ArrayObject();
         $sitemap = new Sitemap();
         foreach ($iterator as $entry) {
@@ -109,7 +137,7 @@ class SitemapFactory
      */
     public function createSitemapIndex(Iterator $sitemaps)
     {
-        $groupName = $this->randomHash();
+        $groupName = $this->groupName;
         $sitemapIndexes = new ArrayObject();
         $sitemapIndex = new SitemapIndex();
         $lastmod = date(DateTime::W3C);
