@@ -6,13 +6,15 @@ use InvalidArgumentException;
 
 /**
  * Gets the property of the given array or object.
+ *
  * @param  mixed  $entry
- * @param  string $prop
- * @param  null   $default
+ * @param  mixed|null   $default
+ *
  * @return mixed
+ *
  * @throws InvalidArgumentException
  */
-function get_property($entry, $prop, $default = null)
+function get_property($entry, string $prop, $default = null)
 {
     checktype($entry, ['array', 'object', 'ArrayAccess']);
 
@@ -33,11 +35,10 @@ function get_property($entry, $prop, $default = null)
  *     checktype('foo', ['array', 'ArrayAccess']);
  *
  * @param  mixed $value
- * @param  array $validTypes
- * @return bool
+ *
  * @throws \InvalidArgumentException
  */
-function checktype($value, array $validTypes)
+function checktype($value, array $validTypes): bool
 {
     $nativeTypes = [
         'array'    => 'is_array',
