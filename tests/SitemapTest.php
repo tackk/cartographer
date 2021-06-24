@@ -1,8 +1,10 @@
 <?php
+
+use PHPUnit\Framework\TestCase;
 use Tackk\Cartographer\Sitemap;
 use Tackk\Cartographer\ChangeFrequency;
 
-class SitemapTest extends PHPUnit_Framework_TestCase
+class SitemapTest extends TestCase
 {
     public function testToString()
     {

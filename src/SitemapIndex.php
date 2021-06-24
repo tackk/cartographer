@@ -4,23 +4,20 @@ namespace Tackk\Cartographer;
 
 class SitemapIndex extends AbstractSitemap
 {
-    protected function getRootNodeName()
+    protected function getRootNodeName(): string
     {
         return 'sitemapindex';
     }
 
-    protected function getNodeName()
+    protected function getNodeName(): string
     {
         return 'sitemap';
     }
 
     /**
      * Adds the URL to the sitemapindex.
-     * @param  string     $loc
-     * @param  string|int $lastmod
-     * @return $this
      */
-    public function add($loc, $lastmod)
+    public function add(string $loc, string $lastmod = null): self
     {
         $loc     = $this->escapeString($loc);
         $lastmod = !is_null($lastmod) ? $this->formatDate($lastmod) : null;

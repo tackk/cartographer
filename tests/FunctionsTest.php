@@ -1,9 +1,10 @@
 <?php
 
+use PHPUnit\Framework\TestCase;
 use Tackk\Cartographer;
 
 
-class FunctionsTest extends \PHPUnit_Framework_TestCase
+class FunctionsTest extends TestCase
 {
     public function testGetPropertyFromArray()
     {
@@ -32,8 +33,8 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
 
     public function testGetPropertyFromNonObject()
     {
-        $this->setExpectedException('InvalidArgumentException',
-            'Invalid type: string, Expected type(s): array, object, ArrayAccess');
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid type: string, Expected type(s): array, object, ArrayAccess');
         Cartographer\get_property('foo', 'foo');
     }
 
@@ -45,8 +46,8 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
 
     public function testCheckTypeFails()
     {
-        $this->setExpectedException('InvalidArgumentException',
-            'Invalid type: ArrayObject, Expected type(s): array');
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid type: ArrayObject, Expected type(s): array');
         Cartographer\checktype(new ArrayObject(), ['array']);
     }
 }
