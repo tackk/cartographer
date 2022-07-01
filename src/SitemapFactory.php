@@ -5,13 +5,13 @@ namespace Tackk\Cartographer;
 use ArrayObject;
 use DateTime;
 use Iterator;
-use League\Flysystem\FilesystemInterface;
+use League\Flysystem\FilesystemOperator;
 use RuntimeException;
 
 class SitemapFactory
 {
     /**
-     * @var FilesystemInterface
+     * @var FilesystemOperator
      */
     protected $filesystem = null;
 
@@ -21,21 +21,27 @@ class SitemapFactory
     protected $baseUrl = '';
 
     /**
+     * @var string
+     */
+    protected $groupName = '';
+
+    /**
      * @var array
      */
     protected $filesCreated = [];
 
     /**
-     * @param FilesystemInterface $filesystem
+     * @param FilesystemOperator $filesystem
      */
-    public function __construct(FilesystemInterface $filesystem)
+    public function __construct(FilesystemOperator $filesystem)
     {
         $this->filesystem = $filesystem;
+        $this->groupName = $this->randomHash();
     }
 
     /**
      * Gets the Filesystem.
-     * @return FilesystemInterface
+     * @return FilesystemOperator
      */
     public function getFilesystem()
     {
@@ -65,6 +71,28 @@ class SitemapFactory
     }
 
     /**
+     * Sets the Group Name for sitemap file names.
+     *
+     * @param  string $groupName
+     * @return $this
+     */
+    public function setGroupName($groupName)
+    {
+        $this->groupName = $groupName;
+
+        return $this;
+    }
+
+    /**
+     * Gets the Group Name for sitemap file names.
+     * @return string
+     */
+    public function getGroupName()
+    {
+        return $this->groupName;
+    }
+
+    /**
      * Gets the array of files created.
      * @return array
      */
@@ -81,7 +109,7 @@ class SitemapFactory
      */
     public function createSitemap(Iterator $iterator)
     {
-        $groupName = $this->randomHash();
+        $groupName = $this->groupName;
         $paths = new ArrayObject();
         $sitemap = new Sitemap();
         foreach ($iterator as $entry) {
@@ -109,7 +137,7 @@ class SitemapFactory
      */
     public function createSitemapIndex(Iterator $sitemaps)
     {
-        $groupName = $this->randomHash();
+        $groupName = $this->groupName;
         $sitemapIndexes = new ArrayObject();
         $sitemapIndex = new SitemapIndex();
         $lastmod = date(DateTime::W3C);
