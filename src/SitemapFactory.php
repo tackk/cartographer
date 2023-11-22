@@ -2,12 +2,13 @@
 
 namespace Tackk\Cartographer;
 
-use League\Flysystem\FilesystemInterface;
+
+use League\Flysystem\FilesystemOperator;
 
 class SitemapFactory
 {
     /**
-     * @var FilesystemInterface
+     * @var FilesystemOperator
      */
     protected $filesystem = null;
 
@@ -22,14 +23,14 @@ class SitemapFactory
     protected $filesCreated = [];
 
     /**
-     * @param FilesystemInterface $filesystem
+     * @param FilesystemOperator $filesystem
      */
-    public function __construct(FilesystemInterface $filesystem)
+    public function __construct(FilesystemOperator $filesystem)
     {
         $this->filesystem = $filesystem;
     }
 
-    public function getFilesystem(): FilesystemInterface
+    public function getFilesystem(): FilesystemOperator
     {
         return $this->filesystem;
     }
