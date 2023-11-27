@@ -1,6 +1,8 @@
 <?php
 
-class SitemapIndexTest extends PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class SitemapIndexTest extends TestCase
 {
     public function testToString()
     {

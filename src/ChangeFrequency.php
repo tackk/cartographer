@@ -4,11 +4,11 @@ namespace Tackk\Cartographer;
 
 class ChangeFrequency
 {
-    const ALWAYS  = 'always';
-    const HOURLY  = 'hourly';
-    const DAILY   = 'daily';
-    const WEEKLY  = 'weekly';
-    const MONTHLY = 'monthly';
-    const YEARLY  = 'yearly';
-    const NEVER   = 'never';
+    public const ALWAYS  = 'always';
+    public const HOURLY  = 'hourly';
+    public const DAILY   = 'daily';
+    public const WEEKLY  = 'weekly';
+    public const MONTHLY = 'monthly';
+    public const YEARLY  = 'yearly';
+    public const NEVER   = 'never';
 }

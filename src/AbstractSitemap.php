@@ -2,33 +2,21 @@
 
 namespace Tackk\Cartographer;
 
-use DateTime;
-use DateTimeZone;
-use DOMDocument;
-use DOMElement;
-use InvalidArgumentException;
-use RuntimeException;
-
-class MaxUrlCountExceededException extends RuntimeException
-{
-}
-
+use Tackk\Cartographer\Exception\MaxUrlCountExceededException;
 
 abstract class AbstractSitemap
 {
-    const MAX_URLS = 50000;
+    public const MAX_URLS = 50000;
 
     /**
      * Get the root node name for the sitemap (e.g. 'urlset').
-     * @return string
      */
-    abstract protected function getRootNodeName();
+    abstract protected function getRootNodeName(): string;
 
     /**
      * Get the node name for the sitemap (e.g. 'url').
-     * @return string
      */
-    abstract protected function getNodeName();
+    abstract protected function getNodeName(): string;
 
     /**
      * @var string
@@ -46,12 +34,12 @@ abstract class AbstractSitemap
     protected $xmlNamespaceUri = 'http://www.sitemaps.org/schemas/sitemap/0.9';
 
     /**
-     * @var DOMDocument
+     * @var \DOMDocument
      */
     protected $document;
 
     /**
-     * @var DOMElement
+     * @var \DOMElement
      */
     protected $rootNode;
 
@@ -70,7 +58,7 @@ abstract class AbstractSitemap
      */
     public function __construct()
     {
-        $this->document = new DOMDocument($this->xmlVersion, $this->xmlEncoding);
+        $this->document = new \DOMDocument($this->xmlVersion, $this->xmlEncoding);
         $this->rootNode = $this->document->createElementNS($this->xmlNamespaceUri, $this->getRootNodeName());
 
         // Make the output Pretty
@@ -80,49 +68,45 @@ abstract class AbstractSitemap
     /**
      * Freeze the sitemap, and append the rootNode to the document.
      */
-    public function freeze()
+    public function freeze(): void
     {
         $this->document->appendChild($this->rootNode);
         $this->isFrozen = true;
     }
 
-    public function isFrozen()
+    public function isFrozen(): bool
     {
         return $this->isFrozen;
     }
 
     /**
      * Gets the number of Urls in the sitemap.
-     * @return int
      */
-    public function getUrlCount()
+    public function getUrlCount(): int
     {
         return $this->urlCount;
     }
 
     /**
      * Checks if the sitemap contains the maximum URL count.
-     * @return bool
      */
-    public function hasMaxUrlCount()
+    public function hasMaxUrlCount(): bool
     {
         return $this->urlCount === static::MAX_URLS;
     }
 
     /**
      * Converts the Sitemap to an XML string.
-     * @return string
      */
-    public function toString()
+    public function toString(): string
     {
         return (string) $this;
     }
 
     /**
      * Converts the Sitemap to an XML string.
-     * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         if (!$this->isFrozen()) {
             $this->freeze();
@@ -133,11 +117,10 @@ abstract class AbstractSitemap
 
     /**
      * Adds a URL to the document with the given array of elements.
-     * @param  array $urlArray
-     * @return $this
+     *
      * @throws MaxUrlCountExceededException
      */
-    protected function addUrlToDocument(array $urlArray)
+    protected function addUrlToDocument(array $urlArray): self
     {
         if ($this->hasMaxUrlCount()) {
             throw new MaxUrlCountExceededException('Maximum number of URLs has been reached, cannot add more.');
@@ -149,7 +132,7 @@ abstract class AbstractSitemap
             if (is_null($value)) {
                 continue;
             }
-            $node->appendChild(new DOMElement($key, $value));
+            $node->appendChild(new \DOMElement($key, $value));
         }
         $this->rootNode->appendChild($node);
         $this->urlCount++;
@@ -160,9 +143,8 @@ abstract class AbstractSitemap
     /**
      * Escapes a string so it can be inserted into the Sitemap
      * @param  string $string The string to escape.
-     * @return string
      */
-    protected function escapeString($string)
+    protected function escapeString(string $string): string
     {
         $from = ['&', '\'', '"', '>', '<'];
         $to   = ['&amp;', '&apos;', '&quot;', '&gt;', '&lt;'];
@@ -172,23 +154,22 @@ abstract class AbstractSitemap
 
     /**
      * Takes a date as a string (or int in the case of a unix timestamp).
-     * @param  string $dateString
-     * @return string
-     * @throws InvalidArgumentException
+     *
+     * @throws \InvalidArgumentException
      */
-    protected function formatDate($dateString)
+    protected function formatDate(string $dateString): string
     {
         try {
             // We have to handle timestamps a little differently
             if (is_numeric($dateString) && (int) $dateString == $dateString) {
-                $date = DateTime::createFromFormat('U', (int) $dateString, new DateTimeZone('UTC'));
+                $date = \DateTime::createFromFormat('U', (int) $dateString, new \DateTimeZone('UTC'));
             } else {
-                $date = new DateTime($dateString, new DateTimeZone('UTC'));
+                $date = new \DateTime($dateString, new \DateTimeZone('UTC'));
             }
 
-            return $date->format(DateTime::W3C);
+            return $date->format(\DateTimeInterface::W3C);
         } catch (\Exception $e) {
-            throw new InvalidArgumentException("Malformed last modified date: {$dateString}", 0, $e);
+            throw new \InvalidArgumentException("Malformed last modified date: {$dateString}", 0, $e);
         }
     }
 }

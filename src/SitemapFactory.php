@@ -2,16 +2,13 @@
 
 namespace Tackk\Cartographer;
 
-use ArrayObject;
-use DateTime;
-use Iterator;
-use League\Flysystem\FilesystemInterface;
-use RuntimeException;
+
+use League\Flysystem\FilesystemOperator;
 
 class SitemapFactory
 {
     /**
-     * @var FilesystemInterface
+     * @var FilesystemOperator
      */
     protected $filesystem = null;
 
@@ -26,29 +23,22 @@ class SitemapFactory
     protected $filesCreated = [];
 
     /**
-     * @param FilesystemInterface $filesystem
+     * @param FilesystemOperator $filesystem
      */
-    public function __construct(FilesystemInterface $filesystem)
+    public function __construct(FilesystemOperator $filesystem)
     {
         $this->filesystem = $filesystem;
     }
 
-    /**
-     * Gets the Filesystem.
-     * @return FilesystemInterface
-     */
-    public function getFilesystem()
+    public function getFilesystem(): FilesystemOperator
     {
         return $this->filesystem;
     }
 
     /**
      * Sets the Base URL for sitemap files.
-     *
-     * @param  string $baseUrl
-     * @return $this
      */
-    public function setBaseUrl($baseUrl)
+    public function setBaseUrl(string $baseUrl): self
     {
         $this->baseUrl = rtrim($baseUrl, '/');
 
@@ -57,32 +47,31 @@ class SitemapFactory
 
     /**
      * Gets the Base URL for sitemap files.
-     * @return string
      */
-    public function getBaseUrl()
+    public function getBaseUrl(): string
     {
         return $this->baseUrl;
     }
 
     /**
      * Gets the array of files created.
-     * @return array
      */
-    public function getFilesCreated()
+    public function getFilesCreated(): array
     {
         return $this->filesCreated;
     }
 
     /**
      * Generates the sitemap(s) using the iterator previously set.
-     * @param \Iterator $iterator
-     * @throws \RuntimeException
+     *
      * @return string The URL for the entry Sitemap
+     *
+     * @throws \RuntimeException
      */
-    public function createSitemap(Iterator $iterator)
+    public function createSitemap(\Iterator $iterator): string
     {
         $groupName = $this->randomHash();
-        $paths = new ArrayObject();
+        $paths = new \ArrayObject();
         $sitemap = new Sitemap();
         foreach ($iterator as $entry) {
             if ($sitemap->hasMaxUrlCount()) {
@@ -104,15 +93,14 @@ class SitemapFactory
 
     /**
      * Creates a Sitemap index given an Iterator of Sitemaps
-     * @param Iterator $sitemaps
      * @return mixed
      */
-    public function createSitemapIndex(Iterator $sitemaps)
+    public function createSitemapIndex(\Iterator $sitemaps)
     {
         $groupName = $this->randomHash();
-        $sitemapIndexes = new ArrayObject();
+        $sitemapIndexes = new \ArrayObject();
         $sitemapIndex = new SitemapIndex();
-        $lastmod = date(DateTime::W3C);
+        $lastmod = date(\DateTimeInterface::W3C);
         foreach ($sitemaps as $sitemapPath) {
             // Ignoring because this is an edge case for HUGE sites...like Facebook.
             // @codeCoverageIgnoreStart
@@ -141,11 +129,10 @@ class SitemapFactory
     /**
      * Writes the given sitemap to the filesystem.  The filename pattern is:
      * {MD5_Hash}.{Class_Name}.{Index}.xml
-     * @param string          $groupName
-     * @param AbstractSitemap $sitemap
+     *
      * @return string The filename of the sitemap written
      */
-    protected function writeSitemap($groupName, AbstractSitemap $sitemap)
+    protected function writeSitemap(string $groupName, AbstractSitemap $sitemap): string
     {
         static $index = 0;
 
@@ -160,11 +147,12 @@ class SitemapFactory
 
     /**
      * Parses the given Entry into its constituent parts.
+     *
      * @param  mixed $entry The entry to parse
-     * @return array
+     *
      * @throws \InvalidArgumentException
      */
-    protected function parseEntry($entry)
+    protected function parseEntry($entry): array
     {
         if (!get_property($entry, 'url')) {
             throw new \InvalidArgumentException('Url is missing or not accessible.');
@@ -179,32 +167,32 @@ class SitemapFactory
 
     /**
      * Generates a random MD5 hash.
-     * @return string
+     *
      * @throws \RuntimeException
      */
-    protected function randomHash()
+    protected function randomHash(): string
     {
         return md5($this->randomBytes(32));
     }
 
     /**
      * Gets the Full URL for the given file.
-     * @param  string $file
-     * @return string
      */
-    protected function fileUrl($file)
+    protected function fileUrl(string $file): string
     {
         return $this->baseUrl.'/'.ltrim($file, '/');
     }
 
     /**
      * Generates a string of random bytes (of given length).
+     *
      * @param  integer $bytes The number of bytes to return.
+     *
      * @throws \RuntimeException
-     * @return string
+     *
      * @codeCoverageIgnore
      */
-    protected function randomBytes($bytes = 32)
+    protected function randomBytes(int $bytes = 32): string
     {
         if (extension_loaded('openssl')) {
             return openssl_random_pseudo_bytes($bytes);
@@ -212,6 +200,6 @@ class SitemapFactory
             return mcrypt_create_iv($bytes, MCRYPT_DEV_URANDOM);
         }
 
-        throw new RuntimeException('Extension "openssl" or "mcrypt" is required, but is not installed.');
+        throw new \RuntimeException('Extension "openssl" or "mcrypt" is required, but is not installed.');
     }
 }
